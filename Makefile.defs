@@ -373,7 +373,6 @@ LIBDIRS    += $(LIBDIR)/lib$(PROJ_PREFIX)Util$(LIBSO_SUFFIX)
 # System libs needed by cpputil code
 
 SYSLIBS    += -ldl
-SYSLIBS    += -lreadline
 SYSLIBS    += -ltermcap
 SYSLIBS    += -lcurl
 
