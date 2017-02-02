@@ -31,6 +31,16 @@
 #define NSEC_PER_SEC      1000000000
 #define NSEC_PER_HALF_SEC  500000000
 
+// dmod(A,B) - A modulo B (double) */
+
+#define dmod(A,B) ((B)!=0.0?((A)*(B)>0.0?(A)-(B)*floor((A)/(B))         \
+                                        :(A)+(B)*floor(-(A)/(B))):(A))
+
+// dnint(A) - round to nearest whole number (double)
+#define dnint(A) ((A)<0.0?ceil((A)-0.5):floor((A)+0.5))
+
+void slaDjcl ( double djm, int *iy, int *im, int *id, double *fd, int *j);
+
 using namespace std;
 using namespace gcp::util;
 
@@ -803,7 +813,121 @@ std::string TimeVal::getUtcString()
 ostream& 
 gcp::util::operator<<(ostream& os, TimeVal& tVal)
 {
-//  os << tVal.dateString();
+  os << tVal.dateString();
   return os;
 }
 
+TimeVal::Date TimeVal::mjdUtcToCalendarDate(double mjdUtc)
+{
+  double frc;     /* The unused fraction of a day returned by slaDjcl() */
+  double integer; /* The integral part of a number */
+  int status;     /* The status return value of slaDjcl() */
+
+  Date date;
+
+  // Perform the conversion.
+
+  slaDjcl(mjdUtc, &date.year_, &date.month_, &date.day_, &frc, &status);
+  
+  // Check for errors.
+
+  switch(status) {
+  case 0:        /* No error */
+    break;
+  case 1:        /* Invalid mjd */
+    ThrowError("MJD before 4701BC March 1");
+    break;
+  };
+  
+  // Fill in the hours minutes and seconds fields.
+
+  frc = modf(frc * 24, &integer);
+
+  date.hour_ = (unsigned int)integer;
+
+  frc = modf(frc * 60, &integer);
+
+  date.min_  = (unsigned int)integer;
+
+  frc = modf(frc * 60, &integer);
+
+  date.sec_  = (unsigned int)integer;
+  date.nsec_ = (unsigned int)(frc * 1000000000U);
+
+  return date;
+}
+
+std::string TimeVal::dateString()
+{
+    Date date = mjdUtcToCalendarDate(getMjd());
+
+  std::ostringstream os;
+
+  os << date.year_ 
+     << setw(2) << setfill('0') << date.month_ 
+     << setw(2) << setfill('0') << date.day_
+     << "_" 
+     << setw(2) << setfill('0') << date.hour_ 
+     << setw(2) << setfill('0') << date.min_
+     << setw(2) << setfill('0') << date.sec_ << "."
+     << setw(9) << setfill('0') << date.nsec_;
+
+  return os.str();
+}
+
+void slaDjcl ( double djm, int *iy, int *im, int *id, double *fd, int *j)
+/*
+**  - - - - - - - -
+**   s l a D j c l
+**  - - - - - - - -
+**
+**  Modified Julian Date to Gregorian year, month, day,
+**  and fraction of a day.
+**
+**  Given:
+**     djm      double     Modified Julian Date (JD-2400000.5)
+**
+**  Returned:
+**     *iy      int        year
+**     *im      int        month
+**     *id      int        day
+**     *fd      double     fraction of day
+**     *j       int        status:
+**                      -1 = unacceptable date (before 4701BC March 1)
+**
+**  The algorithm is derived from that of Hatcher 1984 (QJRAS 25, 53-55).
+**
+**  Defined in slamac.h:  dmod
+**
+**  Last revision:   20 April 1996
+**
+**  Copyright P.T.Wallace.  All rights reserved.
+*/
+{
+  double f, d;
+  long jd, n4, nd10;
+
+/* Check if date is acceptable */
+   if ( ( djm <= -2395522.0 ) || ( djm >= 1e9 ) ) {
+      *j = -1;
+      return;
+   } else {
+      *j = 0;
+
+   /* Separate day and fraction */
+      f = dmod ( djm, 1.0 );
+      if ( f < 0.0 ) f += 1.0;
+      d = djm - f;
+      d = dnint ( d );
+
+   /* Express day in Gregorian calendar */
+      jd = (long) dnint ( d ) + 2400001;
+      n4 = 4L*(jd+((6L*((4L*jd-17918L)/146097L))/4L+1L)/2L-37L);
+      nd10 = 10L*(((n4-237L)%1461L)/4L)+5L;
+      *iy = (int) (n4/1461L-4712L);
+      *im = (int) (((nd10/306L+2L)%12L)+1L);
+      *id = (int) ((nd10%306L)/10L+1L);
+      *fd = f;
+      *j = 0;
+   }
+}

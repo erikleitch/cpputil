@@ -55,6 +55,16 @@ namespace gcp {
     class TimeVal {
     public:
       
+      struct Date {
+	int year_;
+	int month_;
+	int day_;
+	int hour_;
+	int min_;
+	int sec_;
+	int nsec_;
+      };
+
       /**
        * Constructors with no initialization.
        */
@@ -338,6 +348,10 @@ namespace gcp {
       
       std::string getUtcString();
       
+      std::string dateString();
+
+      Date mjdUtcToCalendarDate(double mjdUtc);
+      
       /**
        * Allows cout << timeVal
        */
@@ -404,9 +418,7 @@ namespace gcp {
       void setNanoSeconds(unsigned long nanoSeconds);
 
     }; // End class TimeVal
-
-    std::ostream& operator<<(std::ostream& os, TimeVal& tVal);
-
+    
   } // End namespace util
 } // End namespace gcp
 
