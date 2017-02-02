@@ -12,7 +12,7 @@ include Makefile.defs
 
 all: make_directives make_dirs libs bins msg
 
-MAKE_OBJS = util fftutil pgutil program cfitsio slalib models datasets
+MAKE_OBJS = util program
 
 #-----------------------------------------------------------------------                                 
 # Add optional targets, depending on compile directives

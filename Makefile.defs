@@ -4,36 +4,29 @@
 
 SHELL = /bin/sh
 
-ifndef CLIMAX_TOOLS
- $(error CLIMAX_TOOLS has not been defined. This environment variable should point to the directory where climaxTools has been installed)
-endif
-
-TOOLSDIR = $(CLIMAX_TOOLS)
-export TOOLSDIR
-
 #=======================================================================
 # Directories
 #=======================================================================
 
-# Check if CLIMAXSRC is already defined.  This may be because this
+# Check if CPPUTILSRC is already defined.  This may be because this
 # Makefile was included from another Makefile, in which case don't
-# redefine the path.  Else define CLIMAXSRC to be the current directory
+# redefine the path.  Else define CPPUTILSRC to be the current directory
 
-ifeq ($(CLIMAX_SRC),) 
- $(Warning: CLIMAX_SRC has not been defined. This environment variable should point to the directory where climaxSrc has been installed)
-  CLIMAX_SRC := $(shell pwd)
+ifeq ($(CPPUTIL_SRC),) 
+ $(Warning: CPPUTIL_SRC has not been defined. This environment variable should point to the directory where cpputilSrc has been installed)
+  CPPUTIL_SRC := $(shell pwd)
 endif
 
-TOP = $(CLIMAX_SRC)
-export CLIMAX_SRC
+TOP = $(CPPUTIL_SRC)
+export CPPUTIL_SRC
 export TOP
 
 #-----------------------------------------------------------------------
 # Project specific defines
 #-----------------------------------------------------------------------
 
-PROJ_PREFIX := Climax
-BIN_PREFIX  := climax
+PROJ_PREFIX := Cpputil
+BIN_PREFIX  := cpputil
 
 export PROJ_PREFIX
 export BIN_PREFIX
@@ -58,7 +51,6 @@ export SCRIPTDIR
 # Include directories
 
 INC   = -I$(TOP)
-INC  += -I$(TOOLSDIR)/include
 
 CCINC = $(INC)
 
@@ -374,30 +366,11 @@ export MEXFLAGS
 LIBDIRS = 
 SYSLIBS = 
 
-# Libs specific to climax code
+# Libs specific to cpputil code
 
 LIBDIRS    += $(LIBDIR)/lib$(PROJ_PREFIX)Util$(LIBSO_SUFFIX)
-LIBDIRS    += $(LIBDIR)/lib$(PROJ_PREFIX)FftUtil$(LIBSO_SUFFIX)
-LIBDIRS    += $(LIBDIR)/lib$(PROJ_PREFIX)PgUtil$(LIBSO_SUFFIX)
-LIBDIRS    += $(LIBDIR)/lib$(PROJ_PREFIX)Slalib$(LIBSO_SUFFIX)
-LIBDIRS    += $(LIBDIR)/lib$(PROJ_PREFIX)Datasets$(LIBSO_SUFFIX)
-LIBDIRS    += $(LIBDIR)/lib$(PROJ_PREFIX)Models$(LIBSO_SUFFIX)
 
-# External tools needed by climax code
-
-LIBDIRS    += $(CLIMAX_TOOLS)/lib/libfftw3$(LIBSO_SUFFIX)
-LIBDIRS    += $(CLIMAX_TOOLS)/lib/libcfitsio$(LIBSO_SUFFIX)
-LIBDIRS    += $(CLIMAX_TOOLS)/lib/libmir$(LIBSO_SUFFIX)
-LIBDIRS    += $(CLIMAX_TOOLS)/lib/libgsl$(LIBSO_SUFFIX)
-LIBDIRS    += $(CLIMAX_TOOLS)/lib/libgslcblas$(LIBSO_SUFFIX)
-LIBDIRS    += $(CLIMAX_TOOLS)/lib/libcpgplot$(LIBSO_SUFFIX)
-LIBDIRS    += $(CLIMAX_TOOLS)/lib/libpgplot$(LIBSO_SUFFIX)
-LIBDIRS    += $(X11LD)
-LIBDIRS    += $(GFORTRANLIB)
-
-#LIBDIRS    += $(CLIMAX_TOOLS)/lib/libexif.12$(LIBSO_SUFFIX)
-
-# System libs needed by climax code
+# System libs needed by cpputil code
 
 SYSLIBS    += -ldl
 SYSLIBS    += -lreadline
@@ -424,55 +397,6 @@ export SYSLIBS
 export PROGLIB
 export NOPROGLIBS
 export LIBS
-
-export EMLLIBS
-
-MATLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)Util$(LIBSO_SUFFIX)
-MATLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)Slalib$(LIBSO_SUFFIX)
-MATLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)Matlab$(LIBSO_SUFFIX)
-MATLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)FftUtil$(LIBSO_SUFFIX)
-MATLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)Datasets$(LIBSO_SUFFIX)
-MATLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)Models$(LIBSO_SUFFIX)
-MATLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)PgUtil$(LIBSO_SUFFIX)
-
-MATLIBS += $(CLIMAX_TOOLS)/lib/libmir$(LIBSO_SUFFIX)
-MATLIBS += $(CLIMAX_TOOLS)/lib/libcfitsio$(LIBSO_SUFFIX)
-MATLIBS += $(CLIMAX_TOOLS)/lib/libSfd$(LIBSO_SUFFIX)
-MATLIBS += $(CLIMAX_TOOLS)/lib/libgsl$(LIBSO_SUFFIX)
-MATLIBS += $(CLIMAX_TOOLS)/lib/libgslcblas$(LIBSO_SUFFIX)
-MATLIBS += $(CLIMAX_TOOLS)/lib/libfftw3$(LIBSO_SUFFIX)
-
-MATLIBS += -lreadline
-MATLIBS += -ltermcap
-MATLIBS += -lcurl
-
-MATLIBS += $(CLIMAX_TOOLS)/lib/libcpgplot$(LIBSO_SUFFIX)
-MATLIBS += $(CLIMAX_TOOLS)/lib/libpgplot$(LIBSO_SUFFIX)
-MATLIBS += $(MATX11LD)
-MATLIBS += $(GFORTRANLIB)
-
-export MATLIBS
-
-PYLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)Util$(LIBSO_SUFFIX)
-PYLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)FftUtil$(LIBSO_SUFFIX)
-PYLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)PgUtil$(LIBSO_SUFFIX)
-PYLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)Slalib$(LIBSO_SUFFIX)
-PYLIBS += $(LIBDIR)/lib$(PROJ_PREFIX)Python$(LIBSO_SUFFIX)
-
-PYLIBS += $(CLIMAX_TOOLS)/lib/libmir$(LIBSO_SUFFIX)
-PYLIBS += $(CLIMAX_TOOLS)/lib/libcfitsio$(LIBSO_SUFFIX)
-PYLIBS += $(CLIMAX_TOOLS)/lib/libSfd$(LIBSO_SUFFIX)
-
-PYLIBS += -lreadline
-PYLIBS += -ltermcap
-PYLIBS += -lcurl
-PYLIBS += -lrt
-PYLIBS += $(PGLD) $(X11LD)
-PYLIBS += $(GFORTRANLIB)
-
-PYLIBS = $(LIBDIRS) $(SYSLIBS) $(LIBDIR)/lib$(PROJ_PREFIX)Python$(LIBSO_SUFFIX)
-
-export PYLIBS
 
 # If preprocessor directives have changed, we may have to re-link
 # binaries
