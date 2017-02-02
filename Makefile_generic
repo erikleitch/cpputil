@@ -136,10 +136,10 @@ $(BIN_EXE_PREFIX)%.pyso: $(BIN_PREFIX)%.cc
 # Rule for making .o files from .cc files
 
 %.o: %.cc
-	$(CC) $(CCFLAGS) $(CCINC) -DHOST="\"$(HOSTNAME)\"" -DNAMESERVER="\"$(HOSTNAME):4000\"" -DEVENTSERVER="\"$(HOSTNAME):4001\"" -DCALFILE="\"$(SZA)/array/conf/cal\"" -c -o $@ $<
+	$(CC) $(CCFLAGS) $(CCINC) -DHOST="\"$(HOSTNAME)\"" -c -o $@ $<
 
 %.o: %.c
-	$(CC) $(CCFLAGS) $(CCINC) -DHOST="\"$(HOSTNAME)\"" -DNAMESERVER="\"$(HOSTNAME):4000\"" -DEVENTSERVER="\"$(HOSTNAME):4001\"" -DCALFILE="\"$(SZA)/array/conf/cal\"" -c -o $@ $<
+	$(CC) $(CCFLAGS) $(CCINC) -DHOST="\"$(HOSTNAME)\""  -c -o $@ $<
 
 #=======================================================================
 # Doxygen documentation
