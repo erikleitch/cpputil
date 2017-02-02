@@ -1,0 +1,12 @@
+COMPILE_WITH_DEBUG = 0
+MATLAB_PATH        =
+PYTHON_INC_PATH    =
+NUMPY_INC_PATH     =
+ARCH               =
+X11_LD_PATH        = /opt/local/lib
+GFORTRAN_LD_PATH   = /usr/local/gfortran/lib
+
+
+
+
+
