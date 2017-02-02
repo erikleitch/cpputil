@@ -404,7 +404,9 @@ namespace gcp {
       void setNanoSeconds(unsigned long nanoSeconds);
 
     }; // End class TimeVal
-    
+
+    std::ostream& operator<<(std::ostream& os, TimeVal& tVal);
+
   } // End namespace util
 } // End namespace gcp
 
