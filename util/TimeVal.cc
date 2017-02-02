@@ -803,7 +803,7 @@ std::string TimeVal::getUtcString()
 ostream& 
 gcp::util::operator<<(ostream& os, TimeVal& tVal)
 {
-  os << tVal.dateString();
+//  os << tVal.dateString();
   return os;
 }
 
