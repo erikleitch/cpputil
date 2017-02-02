@@ -1,6 +1,6 @@
 #include "gcp/util/PoissonVariate.h"
 
-#include "gcp/pgutil/PgUtil.h"
+//#include "gcp/pgutil/PgUtil.h"
 
 using namespace std;
 
@@ -57,5 +57,5 @@ void PoissonVariate::plotPdf(double min, double max, unsigned n)
     y[ind] = samplingDistribution_.pdf((double)x[ind]).value();
   }
 
-  PgUtil::linePlot(x, y);
+//  PgUtil::linePlot(x, y);
 }

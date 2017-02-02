@@ -2,8 +2,6 @@
 #include "gcp/util/Sampler.h"
 #include "gcp/util/Stats.h"
 
-#include "gcp/pgutil/PgUtil.h"
-
 #include <cmath>
 
 using namespace std;

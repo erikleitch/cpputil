@@ -1,7 +1,7 @@
 #include "gcp/util/Exception.h"
 #include "gcp/util/Variate.h"
 
-#include "gcp/pgutil/PgUtil.h"
+//#include "gcp/pgutil/PgUtil.h"
 
 using namespace std;
 
@@ -463,7 +463,7 @@ void Variate::plotPdf(double min, double max, unsigned npt)
     y[i] = samplingDistribution_.pdf(x[i]).value();
   }
 
-  PgUtil::linePlot(x, y);
+//  PgUtil::linePlot(x, y);
 }
 
 void Variate::setName(std::string owner, std::string name)
