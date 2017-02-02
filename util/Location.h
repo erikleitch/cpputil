@@ -9,7 +9,6 @@
  * @author Erik Leitch
  */
 #include "gcp/util/Angle.h"
-#include "gcp/util/Astrometry.h"
 #include "gcp/util/Declination.h"
 #include "gcp/util/Delay.h"
 #include "gcp/util/HourAngle.h"
@@ -161,23 +160,7 @@ namespace gcp {
        */
       virtual Delay geometricDelay(Angle az, Angle el, Location* refDLoc);
       
-      /**
-       * Convert mjd to lst for the location of this antenna
-       */
-      HourAngle getLst(double mjd);
       
-      /**
-       * Convert to Ha 1for the actual location of this antenna
-       */
-      HourAngle getHa(double mjdUtc, HourAngle ra);
-      
-      /**
-       * Return a handle to the ephemeris handler
-       */
-      inline Astrometry& ephem() {
-	return astrom_;
-      }
-
       Angle& azimuth() {
 	return azimuth_;
       }
@@ -228,11 +211,6 @@ namespace gcp {
       // Topocentric (X, Y, Z) relative to the fiducial
       
       Vector<double> topocentricXyz_;
-      
-      /**
-       * An object for handling astrometric conversions
-       */
-      Astrometry astrom_;
       
       /**
        * Update coordinate representations of this location

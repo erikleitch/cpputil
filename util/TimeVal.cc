@@ -7,7 +7,6 @@
 
 #include <string.h>
 
-#include "gcp/util/Astrometry.h"
 #include "gcp/util/Debug.h"
 #include "gcp/util/Exception.h"
 #include "gcp/util/LogStream.h"
@@ -808,20 +807,3 @@ gcp::util::operator<<(ostream& os, TimeVal& tVal)
   return os;
 }
 
-std::string TimeVal::dateString()
-{
-  Astrometry::Date date = Astrometry::mjdUtcToCalendarDate(getMjd());
-
-  std::ostringstream os;
-
-  os << date.year_ 
-     << setw(2) << setfill('0') << date.month_ 
-     << setw(2) << setfill('0') << date.day_
-     << "_" 
-     << setw(2) << setfill('0') << date.hour_ 
-     << setw(2) << setfill('0') << date.min_
-     << setw(2) << setfill('0') << date.sec_ << "."
-     << setw(9) << setfill('0') << date.nsec_;
-
-  return os.str();
-}

@@ -205,22 +205,4 @@ Delay Location::geometricDelay(Angle az, Angle el,
 		      Z(false)-refDLoc->Z(false));
 }
 
-/**.......................................................................
- * Convert mjd to lst for the actual location of this antenna
- */
-HourAngle Location::getLst(double mjdUtc)
-{
-  // Use the actual position of this antenna
-
-  return astrom_.mjdUtcToLst(mjdUtc, longitude(false));
-}
-
-/**.......................................................................
- * Convert to Ha for the actual location of this antenna
- */
-HourAngle Location::getHa(double mjdUtc, HourAngle ra)
-{
-  return getLst(mjdUtc) - ra;
-}
-
 

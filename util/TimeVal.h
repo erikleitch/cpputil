@@ -338,8 +338,6 @@ namespace gcp {
       
       std::string getUtcString();
       
-      std::string dateString();
-
       /**
        * Allows cout << timeVal
        */
