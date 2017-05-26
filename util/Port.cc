@@ -1,3 +1,5 @@
+#define __FILEPATH__ "util/Port.cc"
+
 #include "gcp/util/Debug.h"
 #include "gcp/util/Port.h"
 #include "gcp/util/Exception.h"
@@ -40,48 +42,20 @@ void Port::writeString(std::string& message, int fd)
   
   gcp::util::strip(copy, '\n');
   
-  // And construct the output message.  NB: We do NOT want to append
-  // std::ends here, or outStr.size() will include the NULL terminator
+  // And construct the output message
   
-  os << copy << appendStr_.str();
+  os << copy << appendStr_.str() << ends;
   
   std::string outStr = os.str();
   
   // Be very careful here!  std::string::size() returns a count which
   // includes the terminal '\0', but most applications (like write())
   // expect a size which is the equivalent of std::string::size()-1
-
-  /*
-    COUT(outStr.c_str() << " size = " << outStr.size());
-    
-    int i;
-    char outString[100];
-    strcpy(outString, outStr.c_str());
-    for (i=0; i<outStr.size(); i++)
-    {
-    //   if(isalnum(*(outString+i)) || isprint(*outString+i) || isspace(*outString+i)) {
-    if(!iscntrl(*(outString+i))) { 
-    COUT("string[i] = " << *(outString+i));
-    } else if(*(outString+i) == '\r') {
-    COUT("string[i] = CR");
-    } else if(*(outString+i) == '\n') {
-    COUT("string[i] = LF");
-    } else if(*(outString+i) == '\0') {
-    COUT("string[i] = NULL");
-    } else {
-    COUT("string[i] = JUNK");
-    }
-    
-    }
-
-    COUT("fd_ : " << fd_);
-  */
-
-  DBPRINT(true, Debug::DEBUG7, "Writing: " << outStr.c_str() << " size = " << outStr.size());
+  
+  COUT("Writing outStr = '" << outStr << "'");
 
   if(fd_ >= 0) {
-      COUT("Writing to fd = " << fd_);
-      if(write(fd < 0 ? fd_ : fd, (char*)outStr.c_str(), outStr.size()) != outStr.size()) {
+    if(write(fd < 0 ? fd_ : fd, (char*)outStr.c_str(), outStr.size()-1) != outStr.size()-1) {
       errStr.appendSysError(true, "write()");
       throw Error(errStr);
     }
@@ -267,7 +241,10 @@ int Port::getNbyte(int fd)
 
 /*.......................................................................
  * Read bytes from the serial port up to a terminator char and return
- * them as a string
+ * them as a string.
+ *
+ * If continue = true, then continue checking for more data after the
+ * initial nBytes are read.
  */
 bool Port::concatenateString(std::ostringstream& os, int fd, bool cont)
 {
@@ -300,8 +277,9 @@ bool Port::concatenateString(std::ostringstream& os, int fd, bool cont)
 void Port::concatenateChar(std::ostringstream& os, int fd)
 {
   char c;
+  ssize_t nread=0;
   
-  if(read((fd < 0 ? fd_ : fd), &c, 1) < 0) {
+  if((nread=read((fd < 0 ? fd_ : fd), &c, 1)) != 1) {
     LogStream errStr;
     errStr.appendSysError(true, "read()");
     throw Error(errStr);

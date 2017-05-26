@@ -30,6 +30,8 @@ if(doprint && gcp::util::Debug::debugging(level)) {\
 #define DBPRINT(doprint, level, statement) {}
 #endif
 
+#define DBPRINT_SIMPLE(doprint, level, statement) {}
+
 // Some handy predefines
 
 #define DEBUG_CAN       gcp::util::Debug::DEBUG1

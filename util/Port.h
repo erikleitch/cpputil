@@ -45,7 +45,7 @@ namespace gcp {
       /**
        * Connect to the port
        */
-      virtual int connect() {return 0;};
+      virtual int connect() {return -1;};
       
       /**
        * Write a message to the port
@@ -66,7 +66,9 @@ namespace gcp {
 
       std::string readString(int fd=-1);
       
-      bool concatenateString(std::ostringstream& os, int fd=-1, bool cont=true);
+      bool concatenateString(std::ostringstream& os, int fd=-1, 
+			     bool cont=true);
+
       void concatenateChar(std::ostringstream& os, int fd=-1);
       int getNbyte(int fd=-1);
       
