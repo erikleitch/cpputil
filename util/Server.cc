@@ -244,6 +244,8 @@ void Server::sendClientData(NetDat& dat)
 
     std::vector<unsigned char>data = dat.getSerializedData();
 
+    COUT("Serialized size = " << data.size());
+    
     client->handler_.getSendStr()->startPut(data.size());
     client->handler_.getSendStr()->putChar(data.size(), &data[0]);
     client->handler_.getSendStr()->endPut();

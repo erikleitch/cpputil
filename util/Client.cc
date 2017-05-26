@@ -123,6 +123,7 @@ void Client::run()
 {
   int nready=0;
 
+  COUT("Inside run");
   do {
 
     // Block in select() until one or more file descriptors are readable
@@ -145,6 +146,7 @@ void Client::run()
 	handler_.send();
    
     } else {
+        COUT("Attempting to connect to server");
       connect();
     }
 
